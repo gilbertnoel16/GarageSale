@@ -12,3 +12,18 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Donator {
+  id Int @id @default(autoincrement())
+  name String @unique
+  items Item[]
+}
+
+model Item {
+  id String @id
+  description String
+  price Decimal @db.Money
+  donator Donator? @relation(fields: [donatorId], references: [id])
+  donatorId Int?
+  stock Int?
+}

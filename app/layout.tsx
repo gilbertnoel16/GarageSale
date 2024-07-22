@@ -9,6 +9,7 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import Link from "@mui/material/Link";
+import Divider from "@mui/material/Divider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -36,7 +37,9 @@ export default function RootLayout({
                   >
                     <MenuIcon />
                   </IconButton>
-                  <Link href="/" variant="h6" color="inherit" underline="none" sx={{ flexGrow: 1 }}>Garage sale</Link>
+                  <Link href="/" variant="h6" color="inherit" underline="none">Garage sale</Link>
+
+                  <Divider sx={{ flexGrow: 1 }} orientation="vertical" color="inherit" />
                   <Link href="/items" variant="button" color="inherit" underline="none">Items</Link>
                 </Toolbar>
               </AppBar>

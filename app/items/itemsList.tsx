@@ -1,5 +1,4 @@
 import prisma from "@/db";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,7 +18,7 @@ export default async function ItemsList() {
     });
 
     return (
-    <TableContainer component={Paper}>
+    <TableContainer>
         <Table aria-label="Items">
             <TableHead>
                 <TableRow>

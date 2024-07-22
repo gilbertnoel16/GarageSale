@@ -33,6 +33,7 @@ export default function AddItem() {
     return (
         <Box component="form" display='flex' sx={{ flexDirection: 'column', gap: 4, justifyContent: 'space-between', maxWidth: 'md' }} action={handleForm}>
             {state.errors && <Alert severity="error">{state.errors}</Alert>}
+
             <TextField name="id" label="ID" variant="outlined" />
             <TextField name="description" label="Description" variant="outlined" />
             <Autocomplete

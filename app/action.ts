@@ -66,3 +66,33 @@ export async function createItem(_: AddItemFormState, payload: FormData): Promis
 
     return {}
 }
+
+export async function getItems(filter?: string) {
+    if (filter) {
+        return prisma.item.findMany({
+            where: {
+                id: {
+                    contains: filter,
+                    mode: 'insensitive'
+                }
+            },
+            include: {
+                donator: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+    }
+
+    return prisma.item.findMany({
+        include: {
+            donator: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+}

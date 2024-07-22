@@ -1,4 +1,6 @@
-import { Suspense } from "react";
+'use client'
+
+import { Suspense, useState } from "react";
 import Loading from "./loading";
 import ItemsList from "./itemsList";
 import Typography from "@mui/material/Typography";
@@ -11,8 +13,15 @@ import TextField from "@mui/material/TextField";
 import SearchRounded from "@mui/icons-material/SearchRounded";
 import Add from "@mui/icons-material/Add";
 import IconButton from "@mui/material/IconButton";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function Items() {
+    const [filter, setFilter] = useState<string>();
+
+    const handleSearch = useDebouncedCallback((query: string) => {
+        setFilter(query);
+    }, 500)
+
     return (
         <>
             <Typography variant="h5" sx={{ marginBottom: 5 }}>Items</Typography>
@@ -29,6 +38,7 @@ export default function Items() {
                             ),
                         }}
                         variant="standard"
+                        onChange={(e => handleSearch(e.target.value))}
                     />
 
                     <Link variant="button" color="inherit" href="/items/add" underline="none">
@@ -41,7 +51,7 @@ export default function Items() {
                 <Divider />
 
                 <Suspense fallback={<Loading />}>
-                    <ItemsList />
+                    <ItemsList filter={filter} />
                 </Suspense>
             </Paper>
         </>

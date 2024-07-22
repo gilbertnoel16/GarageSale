@@ -39,8 +39,18 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 1. Host a postgres instance locally
 
-```pwsh
-docker run --rm --name pg-docker -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=garage-sale -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data postgres
-```
+    ```pwsh
+    docker run --rm --name pg-docker -d -p 5432:5432 `
+        -e POSTGRES_PASSWORD=postgres `
+        -e POSTGRES_USER=postgres `
+        -e POSTGRES_DB=garage-sale `
+        -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data `
+        postgres
+    ```
 
 2. Copy `.env.sample` to `.env`
+3. Migrate your database to the latest schema
+
+    ```pwsh
+    npx prisma migrate dev
+    ```

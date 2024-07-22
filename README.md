@@ -48,7 +48,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
         postgres
     ```
 
-2. Copy `.env.sample` to `.env`
+2. Copy `.env.sample` to `.env` and replace the following
+
 3. Migrate your database to the latest schema
 
     ```pwsh

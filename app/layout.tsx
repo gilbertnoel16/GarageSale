@@ -37,9 +37,7 @@ export default function RootLayout({
                   >
                     <MenuIcon />
                   </IconButton>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Garage sale
-                  </Typography>
+                  <Link href="/items" variant="button" color="inherit" underline="none">Items</Link>
                 </Toolbar>
               </AppBar>
               <Box sx={{ p: 2 }}>

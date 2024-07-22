@@ -10,11 +10,16 @@ import TableRow from "@mui/material/TableRow";
 export default async function ItemsList() {
     const items = await prisma.item.findMany({
         include: {
-            donator: true
+            donator: {
+                select: {
+                    name: true
+                }
+            }
         }
     });
 
-    return (<TableContainer component={Paper}>
+    return (
+    <TableContainer component={Paper}>
         <Table aria-label="Items">
             <TableHead>
                 <TableRow>

@@ -6,7 +6,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { Item } from "@prisma/client";
-import { getItems } from "../action";
+import { getInStockItems } from "../action";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Button from "@mui/material/Button";
+import Add from "@mui/icons-material/Add";
+import Remove from "@mui/icons-material/Remove";
 
 export default async function ItemsList({ filter }: { filter?: string }) {
     const [items, setItems] = useState<({
@@ -17,10 +21,11 @@ export default async function ItemsList({ filter }: { filter?: string }) {
 
     useEffect(() => {
         (async () => {
-            const items = await getItems(filter)
+            const items = await getInStockItems(filter)
             setItems(items)
         })()
     }, [filter])
+
 
     return (
         <TableContainer>
@@ -29,9 +34,9 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                     <TableRow>
                         <TableCell>ID</TableCell>
                         <TableCell>Description</TableCell>
-                        <TableCell>Donator</TableCell>
                         <TableCell>Price</TableCell>
-                        <TableCell>Stock</TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -44,9 +49,17 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                                 {item.id}
                             </TableCell>
                             <TableCell>{item.description}</TableCell>
-                            <TableCell>{item.donator?.name ?? '-'}</TableCell>
-                            <TableCell>{item.price.toLocaleString()}</TableCell>
-                            <TableCell>{item.stock}</TableCell>
+                            <TableCell>${item.price.toLocaleString()}</TableCell>
+                            <TableCell>
+                                <ButtonGroup variant="contained" aria-label="Basic button group">
+                                    <Button>
+                                        <Remove />
+                                    </Button>
+                                    <Button >
+                                        <Add />
+                                    </Button>
+                                </ButtonGroup>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

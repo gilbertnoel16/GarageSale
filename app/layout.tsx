@@ -26,7 +26,7 @@ export default function RootLayout({
       <body >
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <Box sx={{ flexGrow: 1 }}>
+            <Box sx={{ flexGrow: 1, justifyContent: 'space-between' }}>
               <AppBar position="static">
                 <Toolbar>
                   <IconButton
@@ -40,7 +40,8 @@ export default function RootLayout({
                   <Link href="/" variant="h6" color="inherit" underline="none">Garage sale</Link>
 
                   <Divider sx={{ flexGrow: 1 }} orientation="vertical" color="inherit" />
-                  <Link href="/items" variant="button" color="inherit" underline="none">Items</Link>
+                  <Link href="/items" variant="button" color="inherit" underline="none" sx={{ margin: 2 }}>Items</Link>
+                  <Link href="/checkout" variant="button" color="inherit" underline="none">Checkout</Link>
                 </Toolbar>
               </AppBar>
               <Box sx={{ p: 2 }}>

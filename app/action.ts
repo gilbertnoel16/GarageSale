@@ -96,3 +96,40 @@ export async function getItems(filter?: string) {
         }
     });
 }
+export async function getInStockItems(filter?: string) {
+    if (filter) {
+        return prisma.item.findMany({
+            where: {
+                id: {
+                    contains: filter,
+                    mode: 'insensitive'
+                },
+                stock: {
+                    gt: 0
+                }
+            },
+            include: {
+                donator: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+    }
+
+    return prisma.item.findMany({
+        where: {
+            stock: {
+                gt: 0
+            }
+        },
+        include: {
+            donator: {
+                select: {
+                    name: true
+                }
+            }
+        }
+    });
+}

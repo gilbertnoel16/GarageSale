@@ -57,6 +57,9 @@ export async function createItem(_: AddItemFormState, payload: FormData): Promis
                 }
             }
         })
+        return {
+            success: `Successfully created ${item.id}`
+        }
     } catch (e) {
         if (e instanceof Error) {
             return { errors: e.message }

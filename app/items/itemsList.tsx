@@ -5,15 +5,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import { Item } from "@prisma/client";
 import { getItems } from "../action";
 
+type LocalItem = {
+    price: number;
+    donator: {
+        name: string;
+    } | null;
+    id: string;
+    description: string;
+    donatorId: number | null;
+    stock: number | null;
+};
+
 export default async function ItemsList({ filter }: { filter?: string }) {
-    const [items, setItems] = useState<({
-        donator: {
-            name: string;
-        } | null;
-    } & Item)[]>();
+    const [items, setItems] = useState<LocalItem[]>();
 
     useEffect(() => {
         (async () => {

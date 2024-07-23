@@ -41,7 +41,8 @@ export default function RootLayout({
 
                   <Divider sx={{ flexGrow: 1 }} orientation="vertical" color="inherit" />
                   <Link href="/items" variant="button" color="inherit" underline="none" sx={{ margin: 2 }}>Items</Link>
-                  <Link href="/checkout" variant="button" color="inherit" underline="none">Checkout</Link>
+                  <Link href="/checkout" variant="button" color="inherit" underline="none" sx={{ margin: 2 }}>Checkout</Link>
+                  <Link href="/transactions" variant="button" color="inherit" underline="none">Transactions</Link>
                 </Toolbar>
               </AppBar>
               <Box sx={{ p: 2 }}>

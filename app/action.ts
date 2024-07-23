@@ -5,6 +5,7 @@ import { Item } from "@prisma/client";
 import { AddItemFormState } from "./items/add/page";
 import { Decimal } from "@prisma/client/runtime/library";
 
+
 export async function getDonators() {
     return prisma.donator.findMany();
 }
@@ -135,6 +136,7 @@ export async function getInStockItems(filter?: string) {
             price: item.price.toNumber()
         }))
     }
+    
 
     const items = await prisma.item.findMany({
         where: {
@@ -156,3 +158,61 @@ export async function getInStockItems(filter?: string) {
         price: item.price.toNumber()
     }));
 }
+
+export async function addTransaction(cart: any[], totalPrice: number, paymentMethod: string): Promise<{ success?: string; errors?: string }> {
+    try {
+      // Log the data being sent to Prisma for debugging
+      console.log("Creating transaction with data:", {
+        totalPrice,
+        paymentMethod,
+        items: cart.map(item => ({
+          id: item.id,
+          description: item.description,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      });
+  
+      // Create the transaction with transaction items
+      const transaction = await prisma.transaction.create({
+        data: {
+          totalPrice,
+          paymentMethod,
+          TransactionItem: {
+            create: cart.map(item => ({
+              itemId: item.id,
+              quantity: item.quantity,
+            })),
+          },
+        },
+      });
+  
+      return {
+        success: `Successfully created transaction ${transaction.id}`
+      };
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error('Error creating transaction:', e.message);
+        return { errors: e.message };
+      }
+    }
+  
+    return {};
+}
+
+export async function getTransactions() {
+    const transactions = await prisma.transaction.findMany({
+      include: {
+        TransactionItem: {
+          include: {
+            item: true, // Include the related items for each transaction item
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+    return transactions;
+  }
+

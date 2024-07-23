@@ -5,32 +5,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
-import { Item } from "@prisma/client";
 import { getInStockItems } from "../action";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import Add from "@mui/icons-material/Add";
 import Remove from "@mui/icons-material/Remove";
 
-export default async function ItemsList({ filter }: { filter?: string }) {
-    const [items, setItems] = useState<({
-        price: number;
-        donator: {
-            name: string;
-        } | null;
-        id: string;
-        description: string;
-        donatorId: number | null;
-        stock: number | null;
-    })[]>();
+export default function ItemsList({ filter, onAddItem, onRemoveItem }) {
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
         (async () => {
-            const items = await getInStockItems(filter)
-            setItems(items)
-        })()
-    }, [filter])
-
+            const items = await getInStockItems(filter);
+            setItems(items);
+        })();
+    }, [filter]);
 
     return (
         <TableContainer>
@@ -40,7 +29,7 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                         <TableCell>ID</TableCell>
                         <TableCell>Description</TableCell>
                         <TableCell>Price</TableCell>
-                        <TableCell></TableCell>
+                        <TableCell>Stock</TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                 </TableHead>
@@ -55,12 +44,13 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                             </TableCell>
                             <TableCell>{item.description}</TableCell>
                             <TableCell>${item.price.toLocaleString()}</TableCell>
+                            <TableCell>{item.stock}</TableCell>
                             <TableCell>
                                 <ButtonGroup variant="contained" aria-label="Basic button group">
-                                    <Button>
+                                    <Button onClick={() => onRemoveItem(item)}>
                                         <Remove />
                                     </Button>
-                                    <Button >
+                                    <Button onClick={() => onAddItem(item)}>
                                         <Add />
                                     </Button>
                                 </ButtonGroup>
@@ -69,5 +59,6 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer>)
+        </TableContainer>
+    );
 }

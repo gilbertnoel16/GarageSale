@@ -21,10 +21,29 @@ model Donator {
 }
 
 model Item {
-  id String @id
+  id          String          @id
   description String
-  price Decimal @db.Money
-  donator Donator? @relation(fields: [donatorId], references: [id])
-  donatorId Int?
-  stock Int?
+  price       Decimal         @db.Money
+  donatorId   Int?
+  donator     Donator?        @relation(fields: [donatorId], references: [id])
+  stock       Int?
+  TransactionItem TransactionItem[]
+}
+
+model Transaction {
+  id           Int               @id @default(autoincrement())
+  createdAt    DateTime          @default(now())
+  totalPrice   Decimal           @db.Money
+  paymentMethod String
+  TransactionItem TransactionItem[]
+}
+
+model TransactionItem {
+  id            Int         @id @default(autoincrement())
+  transactionId Int
+  itemId        String
+  quantity      Int
+
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+  item        Item        @relation(fields: [itemId], references: [id])
 }

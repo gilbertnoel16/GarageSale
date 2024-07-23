@@ -45,7 +45,7 @@ export default async function ItemsList({ filter }: { filter?: string }) {
                             </TableCell>
                             <TableCell>{item.description}</TableCell>
                             <TableCell>{item.donator?.name ?? '-'}</TableCell>
-                            <TableCell>{item.price.toLocaleString()}</TableCell>
+                            <TableCell>${item.price.toLocaleString()}</TableCell>
                             <TableCell>{item.stock}</TableCell>
                         </TableRow>
                     ))}

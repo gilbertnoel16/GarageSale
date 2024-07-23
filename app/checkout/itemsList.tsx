@@ -14,10 +14,15 @@ import Remove from "@mui/icons-material/Remove";
 
 export default async function ItemsList({ filter }: { filter?: string }) {
     const [items, setItems] = useState<({
+        price: number;
         donator: {
             name: string;
         } | null;
-    } & Item)[]>();
+        id: string;
+        description: string;
+        donatorId: number | null;
+        stock: number | null;
+    })[]>();
 
     useEffect(() => {
         (async () => {

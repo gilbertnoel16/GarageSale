@@ -44,7 +44,6 @@ function itemFormToItemAndDonator(formData: FormData): [Omit<Item, 'donatorId'>,
 
 export async function createItem(_: AddItemFormState, payload: FormData): Promise<AddItemFormState> {
     try {
-        console.debug(payload)
         const [item, donator] = itemFormToItemAndDonator(payload);
 
         await prisma.item.create({
@@ -69,7 +68,7 @@ export async function createItem(_: AddItemFormState, payload: FormData): Promis
 
 export async function getItems(filter?: string) {
     if (filter) {
-        return prisma.item.findMany({
+        const items = await prisma.item.findMany({
             where: {
                 id: {
                     contains: filter,
@@ -84,9 +83,14 @@ export async function getItems(filter?: string) {
                 }
             }
         });
+
+        return items.map(item => ({
+            ...item,
+            price: item.price.toNumber()
+        }))
     }
 
-    return prisma.item.findMany({
+    const items = await prisma.item.findMany({
         include: {
             donator: {
                 select: {
@@ -95,10 +99,16 @@ export async function getItems(filter?: string) {
             }
         }
     });
+
+    return items.map(item => ({
+        ...item,
+        price: item.price.toNumber()
+    }))
 }
+
 export async function getInStockItems(filter?: string) {
     if (filter) {
-        return prisma.item.findMany({
+        const items = await prisma.item.findMany({
             where: {
                 id: {
                     contains: filter,
@@ -116,9 +126,14 @@ export async function getInStockItems(filter?: string) {
                 }
             }
         });
+
+        return items.map(item => ({
+            ...item,
+            price: item.price.toNumber()
+        }))
     }
 
-    return prisma.item.findMany({
+    const items = await prisma.item.findMany({
         where: {
             stock: {
                 gt: 0
@@ -132,4 +147,9 @@ export async function getInStockItems(filter?: string) {
             }
         }
     });
+
+    return items.map(item => ({
+        ...item,
+        price: item.price.toNumber()
+    }));
 }

@@ -41,7 +41,7 @@ export default function TransactionsList() {
       setTransactions(
         fetchedTransactions.map((fetchedTransaction) => ({
           ...fetchedTransaction,
-          totalPrice: fetchedTransaction.totalPrice.toNumber(),
+          totalPrice: fetchedTransaction.totalPrice,
         }))
       );
       setLoading(false);

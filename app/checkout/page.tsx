@@ -22,7 +22,8 @@ import InputLabel from "@mui/material/InputLabel";
 import { addTransaction } from "../action"; // Adjust the path as necessary
 import { Item } from "@prisma/client";
 
-type CartItem = Item & { quantity: number };
+type SerializableItem = Omit<Item, "price"> & { price: number };
+type CartItem = SerializableItem & { quantity: number };
 
 export default function Checkout() {
   const [filter, setFilter] = useState<string>();
@@ -50,14 +51,14 @@ export default function Checkout() {
 
   const calculateTotalPrice = (cart: CartItem[], discount = 0) => {
     const total = cart.reduce(
-      (sum, item) => sum + item.price.toNumber() * item.quantity,
+      (sum, item) => sum + item.price * item.quantity,
       0
     );
     const discountedTotal = total - (discount || 0);
     setTotalPrice(discountedTotal > 0 ? discountedTotal : 0);
   };
 
-  const updateItemQuantity = (item: Item, increment: boolean) => {
+  const updateItemQuantity = (item: SerializableItem, increment: boolean) => {
     let updatedCart = [...cart];
     const index = updatedCart.findIndex((cartItem) => cartItem.id === item.id);
 
@@ -79,11 +80,11 @@ export default function Checkout() {
     calculateTotalPrice(updatedCart, discount);
   };
 
-  const handleAddItem = (item: Item) => {
+  const handleAddItem = (item: SerializableItem) => {
     updateItemQuantity(item, true);
   };
 
-  const handleRemoveItem = (item: Item) => {
+  const handleRemoveItem = (item: SerializableItem) => {
     updateItemQuantity(item, false);
   };
 
@@ -167,7 +168,7 @@ export default function Checkout() {
               {sortedCart.map((item, index) => (
                 <li key={index}>
                   <Typography variant="body1">
-                    {item.id} - {item.description} - ${item.price.toNumber()} x{" "}
+                    {item.id} - {item.description} - ${item.price} x{" "}
                     {item.quantity}
                   </Typography>
                   <IconButton onClick={() => handleRemoveItem(item)}>

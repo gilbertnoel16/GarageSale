@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -18,8 +18,8 @@ import Loading from "../items/loading"; // Assuming there is a loading component
 
 type TransactionWithItems = {
   id: number;
-  createdAt: string;
-  totalPrice: string;
+  createdAt: Date;
+  totalPrice: number;
   paymentMethod: string;
   TransactionItem: {
     item: {
@@ -38,7 +38,12 @@ export default function TransactionsList() {
   useEffect(() => {
     async function fetchTransactions() {
       const fetchedTransactions = await getTransactions();
-      setTransactions(fetchedTransactions);
+      setTransactions(
+        fetchedTransactions.map((fetchedTransaction) => ({
+          ...fetchedTransaction,
+          totalPrice: fetchedTransaction.totalPrice,
+        }))
+      );
       setLoading(false);
     }
     fetchTransactions();
@@ -48,8 +53,8 @@ export default function TransactionsList() {
     setSearchQuery(e.target.value);
   };
 
-  const filteredTransactions = transactions.filter(transaction =>
-    transaction.TransactionItem.some(transactionItem =>
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.TransactionItem.some((transactionItem) =>
       transactionItem.item.id.toLowerCase().includes(searchQuery.toLowerCase())
     )
   );
@@ -95,15 +100,21 @@ export default function TransactionsList() {
                 <TableRow key={transaction.id}>
                   <TableCell>{transaction.id}</TableCell>
                   <TableCell>
-                    {transaction.TransactionItem.map((transactionItem, index) => (
-                      <div key={index}>
-                        {transactionItem.item.id} - {transactionItem.item.description} (Quantity: {transactionItem.quantity})
-                      </div>
-                    ))}
+                    {transaction.TransactionItem.map(
+                      (transactionItem, index) => (
+                        <div key={index}>
+                          {transactionItem.item.id} -{" "}
+                          {transactionItem.item.description} (Quantity:{" "}
+                          {transactionItem.quantity})
+                        </div>
+                      )
+                    )}
                   </TableCell>
                   <TableCell>${transaction.totalPrice}</TableCell>
                   <TableCell>{transaction.paymentMethod}</TableCell>
-                  <TableCell>{new Date(transaction.createdAt).toLocaleString()}</TableCell>
+                  <TableCell>
+                    {new Date(transaction.createdAt).toLocaleString()}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -1,14 +1,12 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE "Transaction" (
+    "id" SERIAL NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "totalPrice" MONEY NOT NULL,
+    "paymentMethod" TEXT NOT NULL,
 
-  - You are about to drop the column `transactionId` on the `Item` table. All the data in the column will be lost.
-
-*/
--- DropForeignKey
-ALTER TABLE "Item" DROP CONSTRAINT "Item_transactionId_fkey";
-
--- AlterTable
-ALTER TABLE "Item" DROP COLUMN "transactionId";
+    CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "TransactionItem" (

@@ -29,7 +29,7 @@ export default function Checkout() {
   const [filter, setFilter] = useState<string>();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [discount, setDiscount] = useState<number | undefined>();
+  const [discount, setDiscount] = useState<string>();
   const [paymentMethod, setPaymentMethod] = useState("Interac");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +46,15 @@ export default function Checkout() {
     }
     const cart = JSON.parse(stringifiedCart) || [];
     setCart(cart);
-    calculateTotalPrice(cart, discount);
+    
+    let _discount = 0;
+    if (discount !== undefined) {
+      try {
+        _discount = parseFloat(discount);
+      } catch (e) {
+      }
+    }
+    calculateTotalPrice(cart, _discount);
   }, []);
 
   const calculateTotalPrice = (cart: CartItem[], discount = 0) => {
@@ -77,7 +85,15 @@ export default function Checkout() {
 
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    calculateTotalPrice(updatedCart, discount);
+
+    let _discount = 0;
+    if (discount !== undefined) {
+      try {
+        _discount = parseFloat(discount);
+      } catch (e) {
+      }
+    }
+    calculateTotalPrice(updatedCart, _discount);
   };
 
   const handleAddItem = (item: SerializableItem) => {
@@ -107,9 +123,13 @@ export default function Checkout() {
   const handleDiscountChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const discountValue = parseFloat(e.target.value);
-    setDiscount(discountValue);
-    calculateTotalPrice(cart, discountValue);
+    setDiscount(e.target.value);
+    try {
+      const discountValue = parseFloat(e.target.value);
+      calculateTotalPrice(cart, discountValue);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handlePaymentMethodChange = (event: SelectChangeEvent<string>) => {
@@ -151,14 +171,7 @@ export default function Checkout() {
       </Box>
 
       {/* Mini Cart on the right side */}
-      <Box
-        sx={{
-          width: "30%",
-          padding: 2,
-          border: "1px solid #ccc",
-          borderRadius: 4,
-        }}
-      >
+      <Box>
         <Typography variant="h6">Mini Cart</Typography>
         {sortedCart.length === 0 ? (
           <Alert severity="info">Your cart is empty</Alert>
@@ -184,7 +197,7 @@ export default function Checkout() {
               label="Discount"
               type="number"
               variant="outlined"
-              value={discount !== null ? discount : ""}
+              value={discount ?? ""}
               onChange={handleDiscountChange}
               sx={{ marginTop: 2 }}
             />

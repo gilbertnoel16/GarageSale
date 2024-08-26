@@ -14,22 +14,22 @@ type ItemListProps = {
 };
 
 export default function ItemsList({ onAddItem, onRemoveItem }: ItemListProps) {
-  const actionButtonsRenderer = (item: Item) => (
-    <ButtonGroup variant="contained" aria-label="actions">
-      <Button onClick={() => onRemoveItem(item)}>
-        <Remove />
-      </Button>
-      <Button onClick={() => onAddItem(item)}>
-        <Add />
-      </Button>
-    </ButtonGroup>
-  );
+    const actionButtonsRenderer = (item: Item) => (
+        <ButtonGroup variant="contained" aria-label="actions">
+            <Button onClick={() => onRemoveItem(item)}>
+                <Remove />
+            </Button>
+            <Button onClick={() => onAddItem(item)}>
+                <Add />
+            </Button>
+        </ButtonGroup>
+    );
 
-  return (
-    <SearchableTable
-      dataSource={getInStockItems}
-      keys={["id", "description", "price", "stock"]}
-      additionalColumns={[["actions", actionButtonsRenderer]]}
-    />
-  );
+    return (
+        <SearchableTable
+            dataSource={getInStockItems}
+            keys={["id", "description", "price", "stock"]}
+            additionalColumns={[["actions", actionButtonsRenderer]]}
+        />
+    );
 }
